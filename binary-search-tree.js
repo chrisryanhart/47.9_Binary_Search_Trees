@@ -23,18 +23,16 @@ class BinarySearchTree {
       return this;
     } 
 
-    let queue = [this.root];
+    let currentNode = this.root;
 
-    while(queue.length !== 0){
-      // if greater than
-      let currentNode = queue.shift();
+    while(true){
+
       if(val > currentNode.val){
         if(currentNode.right === null){
           currentNode.right = new Node(val);
           return this;
         }
-
-        queue.push(currentNode.right);
+        currentNode = currentNode.right;
 
       } else {
           if(currentNode.left === null){
@@ -42,8 +40,7 @@ class BinarySearchTree {
             return this;
           }
           
-          queue.push(currentNode.left);
-
+          currentNode = currentNode.left;
         }
       }
   }
@@ -58,11 +55,8 @@ class BinarySearchTree {
       return this;
     } 
 
-    // let currentNode = this;
-
     const findInsertionPoint = (node) =>{
 
-      // let currentNode = node;
 
       if(val > node.val){
         if(node.right === null){
@@ -91,13 +85,70 @@ class BinarySearchTree {
    * return the node, if found; else undefined. Uses iteration. */
 
   find(val) {
+    if(this.root === null){
+      this.root = new Node(val);
+      return this;
+    } 
 
+    let currentNode = this.root;
+
+    while(currentNode){
+
+      if(currentNode.val === val) return currentNode;
+
+      if(val > currentNode.val){
+        if(currentNode.right === null) return;
+        if(currentNode.right.val === val){
+          return currentNode.right;
+        }
+        currentNode = currentNode.right;
+
+      } else {
+          if(currentNode.left === null) return;
+          if(currentNode.left.val === val){
+            return currentNode.left;
+          }
+
+          currentNode = currentNode.left;
+        }
+      }
   }
 
   /** findRecursively(val): search the tree for a node with value val.
    * return the node, if found; else undefined. Uses recursion. */
 
   findRecursively(val) {
+    if(this.root === null){
+      return;
+    } 
+
+    // let currentNode = this;
+
+    const locateNode = (node) =>{
+
+      if(node.val === val) return node;
+      // let currentNode = node;
+
+      if(val > node.val){
+        if(node.right === null) return;
+
+        if(node.right.val === val){
+         return node.right;
+        } else {
+          return locateNode(node.right);
+        }
+      }else {
+        if(node.left===null) return;
+        if(node.left.val === val){
+          return node.left;
+        } else{
+          return locateNode(node.left);
+        }
+      }
+    }
+
+    return locateNode(this.root);
+
 
   }
 
@@ -106,20 +157,59 @@ class BinarySearchTree {
 
   dfsPreOrder() {
 
+    let currentNode = this.root;
+
+    let nodeArr = [];
+
+    const traversePreOrder = (currentNode) => {
+      nodeArr.push(currentNode.val);
+      if(currentNode.left) traversePreOrder(currentNode.left);
+      if(currentNode.right) traversePreOrder(currentNode.right);
+    }
+
+    traversePreOrder(currentNode);
+
+    return nodeArr;
+
   }
 
   /** dfsInOrder(): Traverse the array using in-order DFS.
    * Return an array of visited nodes. */
 
   dfsInOrder() {
+    let currentNode = this.root;
 
+    let nodeArr = [];
+
+    const traversePreOrder = (currentNode) => {
+      if(currentNode.left) traversePreOrder(currentNode.left);
+      nodeArr.push(currentNode.val);
+      if(currentNode.right) traversePreOrder(currentNode.right);
+    }
+
+    traversePreOrder(currentNode);
+
+    return nodeArr;
   }
 
   /** dfsPostOrder(): Traverse the array using post-order DFS.
    * Return an array of visited nodes. */
 
   dfsPostOrder() {
+    let currentNode = this.root;
 
+    let nodeArr = [];
+
+    const traversePreOrder = (currentNode) => {
+      if(currentNode.left) traversePreOrder(currentNode.left);
+      if(currentNode.right) traversePreOrder(currentNode.right);
+      nodeArr.push(currentNode.val);
+
+    }
+
+    traversePreOrder(currentNode);
+
+    return nodeArr;
   }
 
   /** bfs(): Traverse the array using BFS.
@@ -127,7 +217,23 @@ class BinarySearchTree {
 
   bfs() {
 
-  }
+    let resultArr = [];
+    let queue = [this.root];
+
+    while(queue.length !== 0){
+      // if greater than
+      let currentNode = queue.shift();
+
+      resultArr.push(currentNode.val);
+
+      if(currentNode.left) queue.push(currentNode.left);
+
+      if(currentNode.right) queue.push(currentNode.right);
+
+        }
+        return resultArr;
+    }
+
 
   /** Further Study!
    * remove(val): Removes a node in the BST with the value val.
