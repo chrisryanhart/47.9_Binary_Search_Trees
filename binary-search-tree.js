@@ -16,12 +16,74 @@ class BinarySearchTree {
 
   insert(val) {
 
+    // traverse BST
+
+    if(this.root === null){
+      this.root = new Node(val);
+      return this;
+    } 
+
+    let queue = [this.root];
+
+    while(queue.length !== 0){
+      // if greater than
+      let currentNode = queue.shift();
+      if(val > currentNode.val){
+        if(currentNode.right === null){
+          currentNode.right = new Node(val);
+          return this;
+        }
+
+        queue.push(currentNode.right);
+
+      } else {
+          if(currentNode.left === null){
+            currentNode.left = new Node(val);
+            return this;
+          }
+          
+          queue.push(currentNode.left);
+
+        }
+      }
   }
+
 
   /** insertRecursively(val): insert a new node into the BST with value val.
    * Returns the tree. Uses recursion. */
 
   insertRecursively(val) {
+    if(this.root === null){
+      this.root = new Node(val);
+      return this;
+    } 
+
+    // let currentNode = this;
+
+    const findInsertionPoint = (node) =>{
+
+      // let currentNode = node;
+
+      if(val > node.val){
+        if(node.right === null){
+          node.right = new Node(val);
+          // return this;
+        } else {
+          return findInsertionPoint(node.right);
+        }
+      }else {
+        if(node.left===null){
+          node.left = new Node(val);
+          // return this;
+        }else{
+          return findInsertionPoint(node.left);
+        }
+      }
+    }
+
+    findInsertionPoint(this.root);
+
+    return this;
 
   }
 
